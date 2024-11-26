@@ -8,6 +8,22 @@
             : "사용자"
         }}의 피드 홈
       </h1>
+
+      <div v-if="feedStore.myFeedList.length === 0 || feedStore.myFeedList[0]?.profileName !== userStore.loginUserProfileName" >
+      <button
+  class="follow-button"
+  :class="{ following: followStatusInfo }"
+  @click="toggleFollow"
+>
+  {{ followStatusInfo ? "팔로잉" : "팔로우" }}
+</button>
+</div>
+<RouterLink
+  :to="{ name: 'followList', params: { feedId: feedStore.myFeedList[0]?.userId } }"
+>
+  <button>팔로우리스트</button>
+</RouterLink>
+
       <RouterLink :to="{ name: 'feedCreate' }">
         <button
           v-if="
@@ -40,7 +56,7 @@
             </span>
             <span v-else>
               {{
-                feed.feed.content && feed.feed.content.length > 5
+                feed.feed.content && feed.feed.content.length > 25
                   ? feed.feed.content.substring(0, 25) + "..."
                   : feed.feed.content
               }}
@@ -109,14 +125,40 @@ import { ref, watch } from "vue";
 import { onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useFeedStore } from "@/stores/feed";
+import { useFollowStore } from "@/stores/follow";
 import { useRoute } from "vue-router";
+import router from "@/router";
 
 const userStore = useUserStore();
 const feedStore = useFeedStore();
+const followStore = useFollowStore();
 const route = useRoute();
 
 const selectedFeed = ref(null);
 const currentImageIndex = ref(0);
+// 컴포넌트에서 사용하는 로직
+const followStatusInfo = ref(false); // 현재 팔로우 상태
+
+const checkFollowStatus = async (followedId) => {
+  // 최신 상태를 기반으로 확인
+  await followStore.getFollowStatus();
+  followStatusInfo.value = followStore.followStatusList.some(
+    (follow) => follow.followedId === followedId
+  );
+};
+
+const toggleFollow = async () => {
+  const isFollowed = followStatusInfo.value;
+
+  if (isFollowed) {
+    await followStore.cancelFollow(route.params.userId);
+  } else {
+    await followStore.registFollow(route.params.userId);
+  }
+
+  // 상태 재확인
+  await checkFollowStatus(route.params.userId);
+};
 
 // route.params.userId가 변경될 때마다 추적
 watch(
@@ -124,23 +166,23 @@ watch(
   (newUserId) => {
     userStore.checkLoginStatus();
     feedStore.getUserFeedList(newUserId);
+    followStore.getFollowStatus();
+    checkFollowStatus(route.params.userId);
   },
   { immediate: true }
 );
 
-// onMounted(() => {
-//   userStore.checkLoginStatus();
-//   const userId = route.params.userId;
-//   feedStore.getUserFeedList(userId);
-// });
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// 모달 관련 함수들
 const openFeedDetail = (feed) => {
   selectedFeed.value = feed;
 };
 
 const closeFeedDetail = () => {
   selectedFeed.value = null;
-  currentImageIndex.value = 0; // 모달을 닫을 때 이미지 인덱스 초기화
+  currentImageIndex.value = 0;
 };
 
 const prevImage = () => {
@@ -159,6 +201,8 @@ const deleteFeed = (feedId) => {
   closeFeedDetail();
 };
 </script>
+
+
 
 <style scoped>
 /* 전체 페이지 스타일 */
@@ -202,6 +246,23 @@ const deleteFeed = (feedId) => {
   transition: background-color 0.3s;
   margin-left: 20px; /* 버튼과 텍스트 사이에 간격을 추가 */
 }
+
+.follow-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #f44336;
+  border: 2px solid #f44336;
+  background-color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.follow-button.following {
+  background-color: #f44336;
+  color: white;
+}
+
 .create-button:hover {
   background-color: #d45051;
 }

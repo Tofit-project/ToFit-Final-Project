@@ -121,7 +121,7 @@ public class FollowsRestController {
 			if (followsList != null && followsList.size() > 0) {
 				return ResponseEntity.status(HttpStatus.OK).body(followsList);
 			}
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(followsList);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

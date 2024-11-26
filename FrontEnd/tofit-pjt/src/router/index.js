@@ -18,6 +18,7 @@ import RecordRegist from "@/components/record/RecordRegist.vue";
 import CommunityView from "@/views/CommunityView.vue";
 import FeedAllList from "@/components/feed/FeedAllList.vue";
 import FeedUpdate from "@/components/feed/FeedUpdate.vue";
+import FollowList from "@/components/feed/FollowList.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -97,6 +98,12 @@ const router = createRouter({
           path: "update/:feedId",
           name: "feedUpdate",
           component: FeedUpdate,
+          props: true,
+        },
+        {
+          path: "follows/:userId?",
+          name: "followList",
+          component: FollowList,
           props: true,
         },
       ],

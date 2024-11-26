@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
 import router from "@/router";
-import FeedAllList from "@/components/feed/FeedAllList.vue";
 
 const REST_API_URL = `http://localhost:8080/tofit/feeds`;
 
