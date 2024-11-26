@@ -98,6 +98,7 @@ onMounted(() => {
 
 .video-info {
   text-align: left;
+  margin-left: 220px;
 }
 
 .video-title {

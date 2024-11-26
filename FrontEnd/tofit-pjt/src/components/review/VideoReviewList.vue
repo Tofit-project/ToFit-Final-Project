@@ -261,11 +261,11 @@ textarea:focus {
 }
 
 .edit-submit {
-  background-color: #ff848f;
+  background-color: #f76c6c;
 }
 
 .edit-submit:hover {
-  background-color: #e63946;
+  background-color: #f26465;
 }
 
 .edit-cancel {

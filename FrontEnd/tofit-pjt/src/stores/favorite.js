@@ -56,7 +56,7 @@ export const useFavoriteStore = defineStore("favorite", () => {
 
   // 찜 해제
   const removeFavorite = async function (videoId) {
-    try{
+    try {
       await axios({
         url: `${REST_API_URL}/${videoId}/favorite`,
         method: "DELETE",
@@ -64,8 +64,10 @@ export const useFavoriteStore = defineStore("favorite", () => {
           Authorization: `Bearer ${userStore.token}`,
         },
       });
-      this.favoriteList = this.favoriteList.filter(fav => fav.videoId !== videoId);
-        favoriteInfo.value = false;
+      this.favoriteList = this.favoriteList.filter(
+        (fav) => fav.videoId !== videoId
+      );
+      favoriteInfo.value = false;
     } catch (error) {
       console.error("찜 해제 불가");
     }

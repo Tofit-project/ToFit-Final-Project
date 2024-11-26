@@ -1,6 +1,7 @@
 package com.tofit.mvc.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tofit.mvc.model.dto.Follows;
 
@@ -16,6 +17,6 @@ public interface FollowsService {
 	public Boolean changeFollowCheckStatus(Follows follows);
 	
 	// 사용자 팔로우 전체 조회 
-	public List<Follows> getFollowList(String id);
+	public List<Map<String, Object>> getFollowList(String id);
 
 }

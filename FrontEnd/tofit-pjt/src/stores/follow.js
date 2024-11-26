@@ -6,7 +6,6 @@ import router from "@/router";
 const REST_API_URL = `http://localhost:8080/tofit/follows`;
 
 export const useFollowStore = defineStore("follow", () => {
-
   // 팔로우 등록
   const registFollow = async (followedId) => {
     const token = sessionStorage.getItem("access-token");
@@ -39,8 +38,6 @@ export const useFollowStore = defineStore("follow", () => {
     }
   };
 
-
-
   // 사용자의 팔로우 리스트 조회
   const followStatusList = ref([]);
 
@@ -51,6 +48,7 @@ export const useFollowStore = defineStore("follow", () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status === 200) {
+        console.log(response.data);
         followStatusList.value = response.data;
       } else if (response.status === 204) {
         followStatusList.value = [];

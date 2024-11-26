@@ -57,6 +57,7 @@ export const useFeedStore = defineStore("feed", () => {
         params: params, // 쿼리 파라미터로 userId 전달
       })
       .then((res) => {
+        console.log("체크해야해!!->" + res.data);
         myFeedList.value = res.data; // 응답받은 피드 리스트를 저장
       })
       .catch(() => {

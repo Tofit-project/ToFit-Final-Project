@@ -4,11 +4,13 @@
       class="recommended-section"
       v-if="userStore.loginUserProfileName !== null"
     >
-      <h4>{{ userStore.loginUserProfileName }}님을 위한 추천 운동</h4>
+      <h4 style="font-weight: bold">
+        {{ userStore.loginUserProfileName }}님을 위한 추천 운동
+      </h4>
       <div class="card-container">
         <div
           class="card"
-          v-for="(video, index) in store.recomVideoList"
+          v-for="(video, index) in paginatedRecomVideos"
           :key="index"
         >
           <RouterLink :to="`/${video.videoId}`" class="card-link">
@@ -27,10 +29,27 @@
           </RouterLink>
         </div>
       </div>
+      <div v-if="totalPages > 1" class="pagination">
+        <button
+          class="page-btn"
+          :disabled="currentPage === 1"
+          @click="prevPage"
+        >
+          이전
+        </button>
+        <span>{{ currentPage }} / {{ totalPages }}</span>
+        <button
+          class="page-btn"
+          :disabled="currentPage === totalPages"
+          @click="nextPage"
+        >
+          다음
+        </button>
+      </div>
     </section>
 
     <section class="all-section">
-      <h4>내 목표에 맞는 운동을 찾아보세요!</h4>
+      <h4 style="font-weight: bold">내 목표에 맞는 운동을 찾아보세요!</h4>
       <div class="search-filter">
         <input
           type="text"
@@ -75,7 +94,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useVideoStore } from "@/stores/video";
 import { useUserStore } from "@/stores/user";
 
@@ -95,6 +114,34 @@ const filters = [
   "명상",
   "식단",
 ];
+
+const currentPage = ref(1); // 현재 페이지
+const itemsPerPage = 3; // 페이지당 항목 수
+
+// 추천 영상 목록의 페이지 계산
+const paginatedRecomVideos = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return store.recomVideoList.slice(startIndex, endIndex);
+});
+
+// 전체 페이지 수
+const totalPages = computed(() =>
+  Math.ceil(store.recomVideoList.length / itemsPerPage)
+);
+
+// 페이지 이동 핸들러
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
 
 const searchVideoList = function () {
   store.searchVideoList(searchInfo.value);
@@ -121,10 +168,10 @@ const decode = function (encodedStr) {
   return doc.documentElement.textContent;
 };
 
-onMounted(() => {
-  store.getRecomVideoList();
+onMounted(async () => {
+  userStore.checkLoginStatus(); // 로그인 상태 갱신
+  await store.getRecomVideoList(); // 토큰이 있을 때만 추천 영상 가져오기
   searchVideoList();
-  userStore.checkLoginStatus();
 });
 </script>
 
@@ -213,7 +260,7 @@ onMounted(() => {
 }
 
 .search-btn {
-  background-color: #ff848f;
+  background-color: #f17979;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -222,32 +269,36 @@ onMounted(() => {
 }
 
 .search-btn:hover {
-  background-color: #e63946; /* 더 짙은 색상 */
+  background-color: #f26465;
 }
 
 .filter-buttons {
   display: flex;
-  gap: 0.5rem;
+  justify-content: center; /* 가운데 정렬 */
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  gap: 0.8rem; /* 버튼 간격 */
+  margin-bottom: 1.5rem;
 }
 
 .filter-btn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 20px;
-  background-color: #ffebf1;
-  color: #555;
+  background-color: #ffe4e0;
+  color: #8e4e4b;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .filter-btn.active {
-  background-color: #ff848f;
-  color: white;
+  background-color: #fabcb0;
+  color: #8e4e4b;
+  font-weight: bold;
 }
 
 .filter-btn:hover {
-  background-color: #ffb3c1;
+  transform: scale(1.05);
+  background-color: #fabcb0;
+  font-weight: bold;
 }
 </style>

@@ -1,38 +1,50 @@
 <template>
+  <!-- GPT에게 요약 및 추천 받기 -->
+  <div>
+    <h3 class="calendar-title">이번달 리포트</h3>
+    <p class="calander-content">열정 만!땅! 💪</p>
+    <p class="calander-content">AI 트레이너쌤에게 분석을 받아보세요! 🙌</p>
+    <button class="gpt-message" @click="loadGPT">분석 받기</button>
+
+    <div v-if="showBox">
+      <!-- 로딩 중 메시지 -->
+      <div v-if="isLoading" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>회원님의 운동을 분석 중입니다...</p>
+      </div>
+      <!-- GPT 응답 표시 -->
+      <div v-else>
+        <div class="gpt-response" v-html="formattedGptResponse"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <div class="calendar-container">
-      <h2 class="calendar-title">찜한 동영상 캘린더</h2>
       <FullCalendar :options="calendarOptions" />
     </div>
 
     <!-- 찜한 동영상 목록 -->
     <div class="favorites-list-container">
-      <h3>찜한 동영상</h3>
+      <h3 class="favorites-title">찜한 동영상</h3>
       <div v-if="favoriteList.length === 0">찜한 동영상이 없습니다.</div>
-      <div v-else v-for="fav in favoriteList" :key="fav.videoId" class="favorite-item">
+      <div
+        v-else
+        v-for="fav in favoriteList"
+        :key="fav.videoId"
+        class="favorite-item"
+      >
         <button class="favorite-button" @click="addVideoToToday(fav)">
-          {{ decode(fav.title) }}
+          {{ decode(truncateTitle(fav.title)) }}
         </button>
-        <button class="delete-button" @click="removeFavorite(fav)" aria-label="삭제">
-          삭제
+        <button
+          class="delete-button"
+          @click="removeFavorite(fav)"
+          aria-label="삭제"
+        >
+          X
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- GPT에게 요약 및 추천 받기 -->
-  <div>
-    <h3 class="calendar-title">AI PT쌤에게 추천 받기</h3>
-    <button class="gpt-message" @click="loadGPT">클릭</button>
-
-    <!-- 로딩 중 메시지 -->
-    <div v-if="isLoading" class="loading-indicator">
-      <div class="spinner"></div>
-      <p>로딩 중입니다...</p>
-    </div>
-    <!-- GPT 응답 표시 -->
-    <div v-else>
-      <div class="gpt-response" v-html="formattedGptResponse"></div>
     </div>
   </div>
 
@@ -41,7 +53,9 @@
     <div class="modal-content">
       <div v-if="selectedEvents.length === 0">
         <h3>오늘 한 운동이 없습니다!</h3>
-        <RouterLink :to="{name : 'videoList'}">바로 운동하러 가기</RouterLink>
+        <RouterLink :to="{ name: 'videoList' }"
+          >바로 운동하러 가볼까요?</RouterLink
+        >
       </div>
       <div v-else>
         <h3>{{ selectedDate }} 운동 완료!</h3>
@@ -79,14 +93,15 @@ export default {
         initialView: "dayGridMonth",
         dateClick: this.handleDateClick,
         events: [],
-        eventBackgroundColor: "#ff7676", // 이벤트 배경색
-        eventBorderColor: "#ff4c4c", // 이벤트 테두리 색
-        eventTextColor: "#ffffff", // 이벤트 텍스트 색
+        eventBackgroundColor: "#ffe4e0", // 이벤트 배경색
+        eventBorderColor: "#ffe4e0", // 이벤트 테두리 색
+        eventTextColor: "#8e4e4b", // 이벤트 텍스트 색
       },
       showModal: false, // 모달 표시 여부
       selectedDate: "", // 클릭한 날짜
       selectedEvents: [], // 해당 날짜의 이벤트 목록
       isLoading: false,
+      showBox: false,
     };
   },
   computed: {
@@ -98,22 +113,22 @@ export default {
       const recordStore = useRecordStore();
       return recordStore.recordList || [];
     },
-    gptResponse(){
+    gptResponse() {
       const recordStore = useRecordStore();
       return recordStore.gptMessage;
     },
     // GPT 응답을 HTML로 포맷하기 위한 computed 속성
     formattedGptResponse() {
-      const rawResponse = this.gptResponse || '';
+      const rawResponse = this.gptResponse || "";
 
       // 마크다운 스타일을 HTML로 변환
       let formattedResponse = rawResponse
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")  // **굵은 글씨**
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // **굵은 글씨**
         .replace(/\n/g, "<br>") // 줄바꿈 처리
         .replace(/- (.*?)(?=\n|$)/g, "<br>- $1"); // 목록 처리
 
       return formattedResponse;
-    }
+    },
   },
   methods: {
     formatDate(timestamp) {
@@ -122,6 +137,9 @@ export default {
       const month = String(date.getUTCMonth() + 1).padStart(2, "0");
       const day = String(date.getUTCDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
+    },
+    truncateTitle(title) {
+      return title.length > 15 ? `${title.slice(0, 15)}  ...` : title;
     },
     async loadFavorites() {
       const favStore = useFavoriteStore();
@@ -132,18 +150,19 @@ export default {
       await recordStore.getRecordList();
       this.calendarOptions.events = this.recordList.map((rec) => ({
         title: this.decode(rec.title),
-        videoId: (rec.videoId),
+        videoId: rec.videoId,
         date: this.formatDate(rec.regDate),
       }));
     },
-    async loadGPT(){
+    async loadGPT() {
+      this.showBox = true;
       this.isLoading = true;
       const recordStore = useRecordStore();
-      try{
+      try {
         await recordStore.getGptMessage();
-      } catch(error){
-      console.log(error)
-        recordStore.gptMessage = "AI 추천을 불러오는 데 실패했습니다"
+      } catch (error) {
+        console.log(error);
+        recordStore.gptMessage = "AI 추천을 불러오는 데 실패했습니다";
       } finally {
         this.isLoading = false;
       }
@@ -171,19 +190,19 @@ export default {
 
       // db 저장
       const result = await recordStore.addRecord(fav);
-      if(result === true){
+      if (result === true) {
         this.calendarOptions.events.push({
           title: this.decode(fav.title),
           date: formattedToday,
           videoId: fav.videoId,
         });
-  
+
         this.calendarOptions = { ...this.calendarOptions }; // Reactivity 보장
-      } else if(result === 1){
-        alert("이미 등록된 운동입니다!")
-      } else{
-        alert("다시 시도해주세요!")
-      };
+      } else if (result === 1) {
+        alert("이미 등록된 운동입니다!");
+      } else {
+        alert("다시 시도해주세요!");
+      }
     },
     deleteEvent(event) {
       const recordStore = useRecordStore();
@@ -201,7 +220,6 @@ export default {
     async removeFavorite(fav) {
       const favStore = useFavoriteStore();
       await favStore.removeFavorite(fav.videoId); // 찜한 동영상 삭제
-    
     },
     decode(encodedStr) {
       const doc = new DOMParser().parseFromString(encodedStr, "text/html");
@@ -243,28 +261,57 @@ body {
   font-size: 1.8rem;
   text-align: center;
   margin: 20px 0;
-  color: #ff5a5a; /* 빨간색 */
+  color: #574240; /* 빨간색 */
+}
+
+.calander-content {
+  text-align: center;
+  color: #574240; /* 빨간색 */
+  font-style: italic;
 }
 
 /* 찜한 동영상 목록 스타일 */
 .favorites-list-container {
   flex: 1; /* 목록 영역 */
+  color: #574240;
   padding: 15px;
   border: 1px solid #ffdada; /* 연한 빨간 테두리 */
   border-radius: 8px;
-  background-color: #fff5f5; /* 연한 빨간 배경 */
+  background-color: #fff5f5;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* 찜한 동영상 텍스트 중앙 정렬 */
+.favorites-title {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #574240;
+}
+
+/* favorite-item 간격 조정 */
+.favorite-item {
+  display: flex;
+  justify-content: space-between; /* 버튼들을 양 끝으로 배치 */
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px; /* 간격 조정 */
+  padding: 10px;
+  background-color: #fff5f5; /* 연한 배경색 */
+  border-radius: 5px;
 }
 
 /* 찜한 동영상 버튼 스타일 */
 .favorite-button {
   display: block;
   width: 100%;
-  background-color: #ff7676;
-  color: white;
+  background-color: white;
+  border: 1px solid #ffdada; /* 연한 빨간 테두리 */
+  color: #574240;
   border: none;
   padding: 10px;
-  margin: 10px 0;
+  margin: 5px 0; /* 세로 간격을 줄이기 위해 기존 10px에서 5px으로 줄임 */
+  margin-right: 10px;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
@@ -273,31 +320,28 @@ body {
 }
 
 .favorite-button:hover {
-  background-color: #ff4c4c;
-}
-
-/* 삭제 버튼 스타일 */
-.delete-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #ffffff;
-  color: #ff7676;
-  border: none;
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background-color: #ffdddd;
+  background-color: #ffd2cb;
 }
 
 /* favorite-item의 상대적 위치 설정 */
 .favorite-item {
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 5px; /* 버튼 간격 줄이기 */
+}
+
+/* 삭제 버튼 스타일 */
+.delete-button {
+  background-color: #ff76764e;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 1.2em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #ff7676;
 }
 
 /* GPT 메시지 로딩 중 */
@@ -354,6 +398,7 @@ body {
 }
 
 .modal-content {
+  text-align: center;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -376,7 +421,7 @@ body {
 }
 
 .close-button {
-  background-color: #ff5a5a;
+  background-color: #fb6767;
   color: white;
   border: none;
   padding: 8px 15px;
@@ -388,5 +433,35 @@ body {
 
 .close-button:hover {
   background-color: #ff4c4c;
+}
+
+/* GPT 컨테이너 */
+.gpt-container {
+  text-align: center;
+
+  margin-top: 30px;
+}
+
+/* gpt-message 버튼 스타일 */
+.gpt-message {
+  background-color: #ff7676;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.gpt-message:hover {
+  background-color: #ff4c4c;
+  transform: translateY(-2px);
+}
+
+.gpt-message:active {
+  background-color: #e63b3b;
+  transform: translateY(0);
 }
 </style>

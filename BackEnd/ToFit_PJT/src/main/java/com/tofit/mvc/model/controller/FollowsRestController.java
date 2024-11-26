@@ -1,6 +1,8 @@
 package com.tofit.mvc.model.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,19 +109,20 @@ public class FollowsRestController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Follows>> getFollowsByUserId(@RequestHeader("Authorization") String authHeader) {
+	public ResponseEntity<?> getFollowsByUserId(@RequestHeader("Authorization") String authHeader) {
 		String token = authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
 		String userId = null;
+		List<Map<String, Object>> res = new ArrayList<>();
 
 		if (token != null) {
 			userId = jwtUtil.getUserIdFromToken(token);
 		}
 
 		if (userId != null) {
-			List<Follows> followsList = followsService.getFollowList(userId);
+			res = followsService.getFollowList(userId);
 
-			if (followsList != null && followsList.size() > 0) {
-				return ResponseEntity.status(HttpStatus.OK).body(followsList);
+			if (!res.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK).body(res);
 			}
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}

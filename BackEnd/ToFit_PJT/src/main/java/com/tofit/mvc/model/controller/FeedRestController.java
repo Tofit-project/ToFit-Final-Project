@@ -80,9 +80,10 @@ public class FeedRestController {
 
         String token = authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
         List<Map<String, Object>> res = new ArrayList<>();
-
+        System.out.println(userId);
         if (token != null) {
             String extractedUserId = jwtUtil.getUserIdFromToken(token);
+            
 
             if (extractedUserId != null) {
                 if (userId != null) {
@@ -91,7 +92,9 @@ public class FeedRestController {
                 } else {
                     // userId가 없으면 현재 로그인된 사용자의 피드 조회
                     res = feedService.getFeedListByUserId(extractedUserId);
+                    System.out.println(res);
                 }
+                System.out.println(res);
                 return ResponseEntity.status(HttpStatus.OK).body(res);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유효하지 않은 토큰입니다.");

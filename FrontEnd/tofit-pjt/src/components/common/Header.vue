@@ -60,7 +60,7 @@
                   ><span>피드 관리</span></RouterLink
                 >
               </li>
-              <li><span class="dropdown-item">My 운동</span></li>
+
               <li>
                 <button class="dropdown-item" @click="logout">로그아웃</button>
               </li>
@@ -139,14 +139,14 @@ const logout = function () {
 
 .nav-links li a {
   text-decoration: none;
-  color: white;
+  color: #574240;
   font-size: 1rem;
   font-weight: 500;
   transition: color 0.3s ease, font-weight 0.3s ease;
 }
 
 .nav-links li a:hover {
-  color: #ffebf1;
+  color: #574240;
   font-weight: 700;
 }
 
@@ -232,20 +232,19 @@ const logout = function () {
 
 .login-btn,
 .signup-btn {
-  background-color: #ffd6dc;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  color: #5d1a24;
+  background-color: #f26465; /* 연한 톤의 헤더와 조화 */
+  color: #574240; /* 흰색 텍스트 */
+  border: 2px solid #f26465; /* 헤더 색상과 일치하는 테두리 */
   font-weight: bold;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
 }
 
 .login-btn:hover,
 .signup-btn:hover {
-  background-color: #ffb3c1;
-  transform: scale(1.05);
+  background-color: #f26465; /* 헤더 색상과 동일한 배경색 */
+  color: #574240; /* nav-links와 일치하는 글자색 */
+  transform: scale(1.1); /* 살짝 확대 */
 }
 </style>

@@ -6,7 +6,6 @@ import VideoDetail from "@/components/video/VideoDetail.vue";
 import VideoReviewList from "@/components/review/VideoReviewList.vue";
 import SpecialistList from "@/components/specialist/SpecialistList.vue";
 import UserLogin from "@/components/user/UserLogin.vue";
-import SpecialistDetail from "@/components/specialist/SpecialistDetail.vue";
 import UserSignup from "@/components/user/UserSignup.vue";
 import FeedList from "@/components/feed/FeedList.vue";
 import FeedView from "@/views/FeedView.vue";
@@ -18,7 +17,6 @@ import RecordRegist from "@/components/record/RecordRegist.vue";
 import CommunityView from "@/views/CommunityView.vue";
 import FeedAllList from "@/components/feed/FeedAllList.vue";
 import FeedUpdate from "@/components/feed/FeedUpdate.vue";
-import FollowList from "@/components/feed/FollowList.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,11 +57,6 @@ const router = createRouter({
           name: "specialistList",
           component: SpecialistList,
         },
-        {
-          path: ":specialistId",
-          name: "specialistDetail",
-          component: SpecialistDetail,
-        },
       ],
     },
     {
@@ -98,12 +91,6 @@ const router = createRouter({
           path: "update/:feedId",
           name: "feedUpdate",
           component: FeedUpdate,
-          props: true,
-        },
-        {
-          path: "follows/:userId?",
-          name: "followList",
-          component: FollowList,
           props: true,
         },
       ],
