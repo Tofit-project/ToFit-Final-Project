@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tofit.mvc.jwt.JwtUtil;
+import com.tofit.mvc.model.dto.EmailInfo;
 import com.tofit.mvc.model.dto.User;
+import com.tofit.mvc.model.service.MailService;
+import com.tofit.mvc.model.service.RedisService;
 import com.tofit.mvc.model.service.UserService;
 
 @RestController
@@ -34,15 +38,48 @@ public class UserRestController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder bcpe;
+    private final MailService mailService;
+    private final RedisService redisService;
     
+    public UserRestController(UserService userService, JwtUtil jwtUtil, BCryptPasswordEncoder bcpe,
+			MailService mailService, RedisService redisService) {
+		super();
+		this.userService = userService;
+		this.jwtUtil = jwtUtil;
+		this.bcpe = bcpe;
+		this.mailService = mailService;
+		this.redisService = redisService;
+	}
 
-    public UserRestController(UserService userService, JwtUtil jwtUtil, BCryptPasswordEncoder bcpe) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-        this.bcpe = bcpe;
+	@PostMapping("/mail")
+    public ResponseEntity<Boolean> mailConfirm(@RequestParam String email) throws Exception{
+    	String code = UUID.randomUUID().toString().substring(0,6);
+		boolean result = mailService.sendMail(code, email);
+		
+		// 메일 보내기 성공
+		if(result) {
+			// redis 저장
+			redisService.setCode(email, code);
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
     }
+	
+	@PostMapping("/mail/confirm")
+	public ResponseEntity<?> codeConfirm(@RequestBody EmailInfo emailInfo){
+		String answerCode = redisService.getCode(emailInfo.getEmail());
+		
+		System.out.println(answerCode);
+		
+		if(answerCode == null)
+			return new ResponseEntity<String>("코드 만료", HttpStatus.UNAUTHORIZED);
+		
+		if(answerCode.equals(emailInfo.getCode()))
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		
+		return new ResponseEntity<Boolean>(false, HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+	}
     
-
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestParam String userId, @RequestParam String password,
             @RequestParam String email, @RequestParam String gender, @RequestParam String birth,
