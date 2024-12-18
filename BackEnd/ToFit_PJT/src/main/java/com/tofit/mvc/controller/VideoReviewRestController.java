@@ -1,4 +1,4 @@
-package com.tofit.mvc.model.controller;
+package com.tofit.mvc.controller;
 
 import java.util.List;
 

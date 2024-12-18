@@ -1,4 +1,4 @@
-package com.tofit.mvc.model.config;
+package com.tofit.mvc.config;
 
 
 public class FilterConfig {

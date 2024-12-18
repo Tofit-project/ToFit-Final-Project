@@ -1,4 +1,4 @@
-package com.tofit.mvc.model.config;
+package com.tofit.mvc.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

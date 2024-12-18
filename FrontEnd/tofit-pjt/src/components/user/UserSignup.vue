@@ -75,14 +75,19 @@
       <!-- 이메일 -->
       <div class="form-group">
         <label for="email">이메일</label>
-        <input
-          type="email"
-          id="email"
-          v-model="user.mail"
-          class="form-control"
-          placeholder="example@domain.com"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="email"
+            id="email"
+            v-model="user.mail"
+            class="form-control short-input"
+            placeholder="example@domain.com"
+            required
+          />
+          <button type="button" class="btn btn-secondary check-btn" @click="">
+            인증하기
+          </button>
+        </div>
       </div>
 
       <!-- 성별 -->
@@ -262,7 +267,7 @@ const signUp = function () {
     userStore.userSignup(user.value);
   } else {
     alert("모든 필드를 올바르게 작성해주세요.");
-    rou
+    rou;
   }
 };
 </script>
