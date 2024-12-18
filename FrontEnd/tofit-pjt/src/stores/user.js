@@ -155,7 +155,7 @@ export const useUserStore = defineStore("user", () => {
       .catch(() => {
         alert("다시 시도해주세요.");
       });
-  }
+  };
 
   return {
     userSignup,

@@ -1,47 +1,59 @@
-package com.tofit.mvc.model.controller;
+package com.tofit.mvc.controller;
 
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tofit.mvc.jwt.JwtUtil;
 import com.tofit.mvc.model.dto.FeedReview;
+import com.tofit.mvc.model.dto.FeedReviewView;
 import com.tofit.mvc.model.service.FeedReviewService;
 
 @RestController
 @RequestMapping("/tofit/feeds/{feedId}/review")
+@CrossOrigin("*")
 public class FeedReviewRestController {
 	
 	private final FeedReviewService feedReviewService;
-
-	public FeedReviewRestController(FeedReviewService feedReviewService) {
-		this.feedReviewService = feedReviewService;
-	}
+	private final JwtUtil jwtUtil;
 	
+	public FeedReviewRestController(FeedReviewService feedReviewService, JwtUtil jwtUtil) {
+		super();
+		this.feedReviewService = feedReviewService;
+		this.jwtUtil = jwtUtil;
+	}
+
 	// 피드 댓글 전체 조회
 	@GetMapping()
 	public ResponseEntity<?> list(@PathVariable("feedId") int feedId){
-		List<FeedReview> list = feedReviewService.getReviewList(feedId);
+		List<FeedReviewView> list = feedReviewService.getReviewList(feedId);
 		
 		if(list == null || list.size() == 0)
 			return new ResponseEntity<String>("등록된 댓글이 없습니다", HttpStatus.NO_CONTENT);
 		
-		return new ResponseEntity<List<FeedReview>>(list, HttpStatus.OK);
+		return new ResponseEntity<List<FeedReviewView>>(list, HttpStatus.OK);
 	}
 	
 	// 피드 댓글 등록
 	@PostMapping()
-	public ResponseEntity<?> write(@PathVariable("feedId") int feedId, @RequestBody FeedReview review){
-		review.setFeedId(feedId);
-		
+	public ResponseEntity<?> write(@PathVariable("feedId") int feedId, @RequestHeader(value = "Authorization") String token, @RequestBody FeedReview review){
+		token = token.replace("Bearer ", "");
+	    String userId = jwtUtil.getUserIdFromToken(token);
+	    
+	    review.setFeedId(feedId);
+	    review.setUserId(userId);
+	    
 		boolean isOk = feedReviewService.writeReview(review);
 		if(isOk)
 			return new ResponseEntity<String>("등록 완료", HttpStatus.CREATED);

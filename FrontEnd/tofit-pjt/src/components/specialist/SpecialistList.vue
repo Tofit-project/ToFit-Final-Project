@@ -30,10 +30,7 @@
         v-for="(specialist, index) in filteredSpecialists"
         :key="index"
       >
-        <RouterLink
-          :to="`instructor/${specialist.specialistId}`"
-          class="profile-section"
-        >
+        <div class="profile-section">
           <img :src="specialist.profileImg" alt="Profile" class="profile-img" />
           <div class="specialist-info">
             <h4>{{ specialist.specialistId }}</h4>
@@ -41,7 +38,7 @@
               <span>{{ specialist.hashtag }}</span>
             </p>
           </div>
-        </RouterLink>
+        </div>
 
         <div class="video-list">
           <!-- 이전 버튼 -->
@@ -185,7 +182,7 @@ onMounted(() => {
 
 .search-bar button {
   padding: 0.5rem 1rem;
-  background-color: #ff848f;
+  background-color: #f17979;
   color: white;
   border: none;
   border-radius: 4px;
@@ -194,35 +191,38 @@ onMounted(() => {
 }
 
 .search-bar button:hover {
-  background-color: #e63946;
+  background-color: #f26465;
 }
 
 /* 필터 버튼 영역 */
 .filter-buttons {
   display: flex;
-  gap: 0.5rem;
+  justify-content: center; /* 가운데 정렬 */
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  gap: 0.8rem; /* 버튼 간격 */
+  margin-bottom: 1.5rem;
 }
 
 .filter-buttons button {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 20px;
-  background-color: #ffebf1;
-  color: #555;
+  background-color: #ffe4e0;
+  color: #8e4e4b;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .filter-buttons button.active {
-  background-color: #ff848f;
-  color: white;
+  background-color: #fabcb0;
+  color: #8e4e4b;
+  font-weight: bold;
 }
 
 .filter-buttons button:hover {
   transform: scale(1.05);
-  background-color: #ffb3c1;
+  background-color: #fabcb0;
+  font-weight: bold;
 }
 
 /* 전문가 리스트 */
@@ -287,6 +287,7 @@ onMounted(() => {
 }
 
 .video-item {
+  text-decoration: none;
   text-align: center; /* 제목과 이미지를 정렬 */
   transition: transform 0.3s ease, font-size 0.3s ease;
 }
@@ -337,6 +338,6 @@ onMounted(() => {
 
 .prev-btn:hover,
 .next-btn:hover {
-  background-color: #e63946;
+  background-color: #f26465;
 }
 </style>

@@ -1,4 +1,4 @@
-package com.tofit.mvc.model.config;
+package com.tofit.mvc.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;

@@ -6,7 +6,6 @@ import VideoDetail from "@/components/video/VideoDetail.vue";
 import VideoReviewList from "@/components/review/VideoReviewList.vue";
 import SpecialistList from "@/components/specialist/SpecialistList.vue";
 import UserLogin from "@/components/user/UserLogin.vue";
-import SpecialistDetail from "@/components/specialist/SpecialistDetail.vue";
 import UserSignup from "@/components/user/UserSignup.vue";
 import FeedList from "@/components/feed/FeedList.vue";
 import FeedView from "@/views/FeedView.vue";
@@ -57,11 +56,6 @@ const router = createRouter({
           path: "",
           name: "specialistList",
           component: SpecialistList,
-        },
-        {
-          path: ":specialistId",
-          name: "specialistDetail",
-          component: SpecialistDetail,
         },
       ],
     },

@@ -10,13 +10,27 @@
         <div class="feed-header">
           <!-- 프로필 이미지 클릭 시 해당 사용자 ID로 이동 -->
           <router-link :to="'/feed/' + feed.feed.userId">
-            <img
-              :src="feed.profileImg"
-              alt="Profile Image"
-              class="profile-img"
-            />
+            <div v-if="feed.profileImg">
+              <img
+                :src="feed.profileImg"
+                alt="Profile Image"
+                class="profile-img"
+              />
+            </div>
+            <div v-else>
+              <img
+                src="/images/default_profile.png"
+                alt="Profile Image"
+                class="profile-img"
+              />
+            </div>
           </router-link>
-          <p class="profile-name">{{ feed.profileName }}</p>
+          <p
+            class="profile-name"
+            style="font-weight: bold; margin-top: 15px; font-size: large"
+          >
+            {{ feed.profileName }}
+          </p>
         </div>
         <div class="feed-content">
           <p>{{ feed.feed.content }}</p>
@@ -34,18 +48,27 @@
     </div>
     <p v-else>작성된 피드가 없습니다.</p>
 
-    <!-- 모달 -->
+    <!-- 모달 시작부분 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1-->
     <div v-if="selectedFeed" class="modal-background">
       <div class="modal-content">
         <button class="close-modal" @click="closeModal">x</button>
-
-        <img
-          :src="selectedFeed.profileImg"
-          alt="Profile Image"
-          class="profile-img"
-        />
-        <p class="profile-name">{{ selectedFeed.profileName }}</p>
-
+        <div class="profile-info">
+          <div v-if="selectedFeed.profileImg != null">
+            <img
+              :src="selectedFeed.profileImg"
+              alt="Profile Image"
+              class="profile-img"
+            />
+          </div>
+          <div v-else>
+            <img
+              src="/images/default_profile.png"
+              alt="Profile Image"
+              class="profile-img"
+            />
+          </div>
+          <p class="profile-name">{{ selectedFeed.profileName }}</p>
+        </div>
         <div v-if="selectedFeed.images.length > 0" class="modal-images">
           <button class="arrow left" @click="prevImage"><</button>
           <div class="modal-image">
@@ -60,15 +83,99 @@
 
         <!-- 피드 내용 -->
         <p class="modal-feed-content">{{ selectedFeed.feed.content }}</p>
-
         <div class="modal-actions">
-          <button class="modal-button edit-button">수정</button>
-          <button
-            class="modal-button delete-button"
-            @click="deleteFeed(selectedFeed.feed.feedId)"
+          <div v-if="selectedFeed.feed.userId === userStore.loginUserId">
+            <button class="modal-button edit-button">수정</button>
+            <button
+              class="modal-button delete-button"
+              @click="deleteFeed(selectedFeed.feed.feedId)"
+            >
+              삭제
+            </button>
+          </div>
+        </div>
+        <!-- 피드 댓글 -->
+        <!-- 댓글 작성 폼 -->
+        <div class="comment-form">
+          <div class="textarea-wrapper">
+            <textarea
+              v-model="newComment.content"
+              placeholder="댓글을 작성하세요..."
+              rows="1"
+              @keyup.enter="submitComment(selectedFeed.feed.feedId)"
+            ></textarea>
+            <button
+              @click="submitComment(selectedFeed.feed.feedId)"
+              class="submit-btn"
+            >
+              등록
+            </button>
+          </div>
+        </div>
+        <!-- 댓글 리스트 출력 -->
+        <!-- 댓글 리스트 출력 -->
+        <div
+          class="comment-list"
+          v-if="feedReviewStore.feedReviewList.length !== 0"
+        >
+          <div
+            v-for="(review, index) in feedReviewStore.feedReviewList"
+            :key="review.reviewId"
+            class="review-card"
           >
-            삭제
-          </button>
+            <div class="review-header">
+              <div v-if="review.profileImg !== null">
+                <img
+                  :src="review.profileImg"
+                  alt="Author Image"
+                  class="profile-img"
+                />
+              </div>
+              <div v-else>
+                <img src="/images/default_profile.png" class="profile-img" />
+              </div>
+              <div class="review-author">
+                <strong>{{ review.profileName }}</strong>
+                <span class="review-date">
+                  {{ formatDate(review.regDate) }}</span
+                >
+              </div>
+            </div>
+
+            <!-- 수정 모드 -->
+            <div v-if="editingId === review.reviewId">
+              <textarea
+                v-model="editingContent"
+                rows="1"
+                class="edit-textarea"
+              ></textarea>
+              <div class="edit-actions">
+                <button class="edit-submit" @click="confirmEdit(review)">
+                  완료
+                </button>
+                <button class="edit-cancel" @click="cancelEdit">취소</button>
+              </div>
+            </div>
+
+            <!-- 기본 상태 -->
+            <div v-else>
+              <p class="review-content">{{ review.content }}</p>
+              <div
+                v-if="review.userId === userStore.loginUserId"
+                class="comment-actions"
+              >
+                <button @click="startEditing(review.reviewId, review.content)">
+                  수정
+                </button>
+                <button class="delete" @click="deleteComment(review)">
+                  삭제
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <p>아직 댓글이 없습니다</p>
         </div>
       </div>
     </div>
@@ -79,9 +186,14 @@
 import { ref, onMounted, computed } from "vue";
 import { useFeedStore } from "@/stores/feed";
 import { useUserStore } from "@/stores/user";
+import { useFeedReviewStore } from "@/stores/feedReview";
+import { RouterView } from "vue-router";
+import { useRoute } from "vue-router";
 
+const feedReviewStore = useFeedReviewStore();
 const userStore = useUserStore();
 const feedStore = useFeedStore();
+const route = useRoute();
 const selectedFeed = ref(null);
 const currentImageIndex = ref(0);
 
@@ -92,6 +204,8 @@ onMounted(() => {
 
 const openModal = (feed) => {
   selectedFeed.value = feed;
+
+  feedReviewStore.getFeedReviewList(selectedFeed.value.feed.feedId);
 };
 
 const closeModal = () => {
@@ -126,6 +240,61 @@ const formatTimestamp = (timestamp) => {
     second: "2-digit",
   });
 };
+const newComment = ref({
+  feedId: 0,
+  content: "",
+}); // 새 댓글 내용
+
+// 댓글 수정 상태 관리
+const editingId = ref(null); // 현재 수정 중인 댓글 ID
+const editingContent = ref(""); // 수정 중인 댓글 내용
+
+// 댓글 작성
+const submitComment = (feedId) => {
+  if (newComment.value.content.trim() !== "") {
+    newComment.value.feedId = feedId;
+    feedReviewStore.addReview(newComment.value);
+    newComment.value.content = "";
+  }
+};
+
+// 댓글 삭제
+const deleteComment = function (review) {
+  feedReviewStore.removeReview(review);
+};
+
+// 댓글 수정 모드 시작
+const startEditing = (reviewId, content) => {
+  editingId.value = reviewId;
+  editingContent.value = content;
+};
+
+// 댓글 수정 등록
+const confirmEdit = (review) => {
+  feedReviewStore.updateReview({
+    reviewId: review.reviewId,
+    feedId: review.feedId,
+    content: editingContent.value,
+  });
+
+  editingId.value = null; // 수정 모드 종료
+  editingContent.value = "";
+};
+
+// 댓글 수정 취소
+const cancelEdit = () => {
+  editingId.value = null; // 수정 모드 종료
+  editingContent.value = "";
+};
+
+// 날짜 형식 변환 함수
+const formatDate = (date) => {
+  const formattedDate = new Date(date);
+  const year = formattedDate.getFullYear();
+  const month = String(formattedDate.getMonth() + 1).padStart(2, "0");
+  const day = String(formattedDate.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 </script>
 
 <style scoped>
@@ -158,13 +327,27 @@ const formatTimestamp = (timestamp) => {
 .feed-header {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
+/* 프로필 이미지와 이름을 수평으로 나란히 배치 */
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+/* 프로필 이미지 크기 설정 */
 .profile-img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+/* 프로필 이름 스타일 */
+.profile-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
 }
 
 .feed-image-container {
@@ -184,21 +367,23 @@ const formatTimestamp = (timestamp) => {
 
 .feed-content {
   margin-top: 10px;
+  margin-left: 10px;
 }
 
 .feed-footer {
-  margin-top: 10px;
+  margin-top: 50px;
   text-align: right;
 }
 
 .feed-date {
   color: #777;
   font-size: 12px;
+  margin-right: 10px;
 }
 
 /* 모달 배경 */
 .modal-background {
-  position: fixed;
+  position: fixed; /* 스크롤 시 배경 고정 */
   top: 0;
   left: 0;
   width: 100%;
@@ -208,6 +393,7 @@ const formatTimestamp = (timestamp) => {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden; /* 모달 배경에서 스크롤 막기 */
 }
 
 /* 모달 콘텐츠 */
@@ -216,10 +402,10 @@ const formatTimestamp = (timestamp) => {
   background: white;
   padding: 20px;
   width: 600px;
-  height: 700px;
+  max-height: 100vh; /* 뷰포트의 90% 높이까지 확장 가능 */
+  overflow-y: auto; /* 내부에서 스크롤 가능하게 설정 */
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -270,12 +456,13 @@ const formatTimestamp = (timestamp) => {
 .arrow {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
+  /* transform: translateY(-50%); */
+  /* background-color: rgba(0, 0, 0, 0.5); */
   border: none;
   padding: 10px;
   font-size: 24px;
-  color: white;
+  color: rgb(113, 104, 104);
+  border-radius: 20px;
   cursor: pointer;
   z-index: 1;
 }
@@ -293,16 +480,17 @@ const formatTimestamp = (timestamp) => {
   font-size: 16px;
   line-height: 1.5;
   font-weight: bold;
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 /* 수정/삭제 버튼 */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+  /* margin-top: 5px; */
+  margin-bottom: 15px;
 }
 
 .modal-button {
@@ -315,12 +503,186 @@ const formatTimestamp = (timestamp) => {
 }
 
 .edit-button {
-  background-color: #4caf50;
+  background-color: #bfbfbf;
   color: white;
 }
 
 .delete-button {
   background-color: #f44336;
   color: white;
+}
+
+/* 공통 */
+.review-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+textarea {
+  width: 100%;
+  font-size: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+  border-color: #ff848f;
+  box-shadow: 0 0 4px rgba(255, 132, 143, 0.4);
+}
+
+/* 댓글 작성 폼 */
+.comment-form + div {
+  /* 댓글 리스트 컨테이너 */
+  max-height: 300px; /* 댓글 리스트의 최대 높이 제한 */
+  overflow-y: auto; /* 스크롤바 활성화 */
+  margin-top: 1rem;
+  padding-right: 10px; /* 스크롤바 여유 공간 */
+}
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.submit-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #ff848f;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #e63946;
+}
+
+.comment-list {
+  max-height: 800px; /* 스크롤 영역 최대 높이 설정 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  padding: 10px;
+  border: 1px solid #ddd; /* 스크롤 영역 테두리 추가 (선택 사항) */
+  border-radius: 8px;
+  background-color: #f9f9f9; /* 배경색 추가 (선택 사항) */
+}
+/* 댓글 카드 */
+.review-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.review-author {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.review-author .review-date {
+  margin-left: 10px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* 수정 중일 때 */
+.edit-textarea {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* 수정 버튼 색상 */
+.edit-submit,
+.edit-cancel {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-submit {
+  background-color: #ff848f;
+}
+
+.edit-submit:hover {
+  background-color: #e63946;
+}
+
+.edit-cancel {
+  background-color: #f9ccd4;
+}
+
+.edit-cancel:hover {
+  background-color: #f5a9b8;
+}
+
+/* 댓글 액션 버튼 */
+.comment-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.comment-actions button {
+  padding: 0.4rem 1rem;
+  background-color: #ff848f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.comment-actions button:hover {
+  background-color: #e63946;
+}
+
+.comment-actions .delete {
+  background-color: #f9ccd4;
+}
+
+.comment-actions .delete:hover {
+  background-color: #f5a9b8;
 }
 </style>

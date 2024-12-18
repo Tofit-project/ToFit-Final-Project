@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
 import router from "@/router";
-import FeedAllList from "@/components/feed/FeedAllList.vue";
 
 const REST_API_URL = `http://localhost:8080/tofit/feeds`;
 
@@ -58,6 +57,7 @@ export const useFeedStore = defineStore("feed", () => {
         params: params, // 쿼리 파라미터로 userId 전달
       })
       .then((res) => {
+        console.log("체크해야해!!->" + res.data);
         myFeedList.value = res.data; // 응답받은 피드 리스트를 저장
       })
       .catch(() => {

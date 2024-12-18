@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.tofit.mvc.model.dao.FeedReviewDao;
 import com.tofit.mvc.model.dto.FeedReview;
+import com.tofit.mvc.model.dto.FeedReviewView;
 
 @Service
 public class FeedReviewServiceImpl implements FeedReviewService{
@@ -18,7 +19,7 @@ public class FeedReviewServiceImpl implements FeedReviewService{
 
 	// 피드 댓글 전체 조회
 	@Override
-	public List<FeedReview> getReviewList(int feedId) {
+	public List<FeedReviewView> getReviewList(int feedId) {
 		return feedReviewDao.selectAll(feedId);
 	}
 
