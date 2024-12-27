@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tofit.mvc.jwt.JwtUtil;
 import com.tofit.mvc.model.dto.User;
+import com.tofit.mvc.model.service.EmailService;
 import com.tofit.mvc.model.service.UserService;
 
 @RestController
@@ -34,12 +35,14 @@ public class UserRestController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder bcpe;
+    private final EmailService emailService;
     
 
-    public UserRestController(UserService userService, JwtUtil jwtUtil, BCryptPasswordEncoder bcpe) {
+    public UserRestController(UserService userService, JwtUtil jwtUtil, BCryptPasswordEncoder bcpe, EmailService emailServic) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.bcpe = bcpe;
+        this.emailService = emailServic;
     }
     
 
@@ -87,6 +90,13 @@ public class UserRestController {
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(false);
         }
+    }
+    
+    @PostMapping("/mailConfirm")
+    public String mailConfirm(@RequestParam String email) throws Exception {
+    	System.out.println(email);
+        String code = emailService.sendSimpleMessage(email);
+        return code;
     }
 
     @PostMapping("/login")
