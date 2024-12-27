@@ -1969,6 +1969,9 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-12-27 10:36:27.767
+!MESSAGE Classpath changed for project: ToFit_PJT
 !SESSION 2024-12-27 10:39:42.910 -----------------------------------------------
 eclipse.buildId=4.24.0.202407191504
 java.version=21.0.3
