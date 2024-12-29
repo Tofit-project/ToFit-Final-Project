@@ -2,7 +2,7 @@
   <div class="container">
     <div class="form-wrapper">
       <h2 class="form-title">회원가입</h2>
-
+      <!-- <hr class="guide-line-divider" /> -->
       <!-- 프로필 이미지 -->
       <div class="form-group profile-section">
         <div class="profile-img">
@@ -14,12 +14,16 @@
           <div class="button-group">
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-primary profile-btn"
               @click="triggerFileInput"
             >
-              등록
+              등록하기
             </button>
-            <button type="button" class="btn btn-danger" @click="clearImage">
+            <button
+              type="button"
+              class="btn btn-danger profile-btn"
+              @click="clearImage"
+            >
               삭제
             </button>
           </div>
@@ -297,7 +301,6 @@ const signUp = function () {
 .form-title {
   text-align: center;
   margin-bottom: 20px;
-  font-size: 18px;
   font-weight: bold;
 }
 
@@ -340,17 +343,18 @@ label {
 }
 
 .profile-img img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 50%;
+  margin-top: 20px;
 }
 
 .button-group {
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 40px;
 }
 
 /* 성별 선택 */
@@ -391,5 +395,46 @@ p {
 
 .sign-up-btn:hover {
   background-color: #e86b7a;
+}
+
+/* 수정하기, 탈퇴하기 버튼 공통 스타일 */
+.profile-btn {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.profile-btn:hover {
+  opacity: 0.8;
+}
+
+/* 등록하기 버튼 */
+.btn-primary.profile-btn {
+  background-color: #ef5769; /* 메인 색상에 맞춘 부드러운 톤 */
+  color: white;
+  border: none;
+}
+
+.btn-danger.profile-btn:hover {
+  background-color: #e86b7a; /* 메인 색상 */
+}
+
+/* 삭제제하기 버튼 */
+.btn-danger.profile-btn {
+  background-color: #f29b97; /* 메인 색상에 맞춘 밝은 톤 */
+  color: white;
+  border: none;
+}
+
+.btn-danger.profile-btn:hover {
+  background-color: #e86b7a; /* 메인 색상 */
+}
+
+.guide-line-divider {
+  border: 0;
+  border-top: 1px solid #939191;
+  margin-bottom: 30px;
 }
 </style>

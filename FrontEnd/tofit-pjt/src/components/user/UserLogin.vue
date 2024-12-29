@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="form-wrapper">
       <h2 class="form-title">로그인</h2>
-
+      <!-- <hr class="guide-line-divider" /> -->
       <!-- 아이디 -->
       <div class="form-group">
         <label for="userId">아이디</label>
@@ -30,7 +30,6 @@
           required
         />
       </div>
-
       <!-- 로그인 버튼 -->
       <button @click="login" class="btn login-btn">로그인</button>
     </div>
@@ -71,7 +70,6 @@ const login = function () {
 .form-title {
   text-align: center;
   margin-bottom: 20px;
-  font-size: 18px;
   font-weight: bold;
 }
 
@@ -111,5 +109,12 @@ label {
 
 .login-btn:hover {
   background-color: #e86b7a;
+}
+
+/* 구분선 스타일 */
+.guide-line-divider {
+  border: 0;
+  border-top: 1px solid #939191;
+  margin-bottom: 30px;
 }
 </style>

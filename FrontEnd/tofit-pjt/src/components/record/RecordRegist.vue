@@ -247,7 +247,8 @@ body {
 .container {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  margin-top: 20px;
+  /* padding: 20px; */
 }
 
 /* 캘린더 컨테이너 */
