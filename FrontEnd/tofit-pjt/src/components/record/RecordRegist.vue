@@ -4,7 +4,10 @@
     <h3 class="calendar-title">이번달 리포트</h3>
     <p class="calander-content">열정 만!땅! 💪</p>
     <p class="calander-content">AI 트레이너쌤에게 분석을 받아보세요! 🙌</p>
-    <button class="gpt-message" @click="loadGPT">분석 받기</button>
+    <!-- gpt-message 버튼을 감싸는 div 추가 -->
+    <div class="gpt-message-container">
+      <button class="gpt-message" @click="loadGPT">분석 받기</button>
+    </div>
 
     <div v-if="showBox">
       <!-- 로딩 중 메시지 -->
@@ -34,15 +37,8 @@
         :key="fav.videoId"
         class="favorite-item"
       >
-        <button class="favorite-button" @click="addVideoToToday(fav)">
+        <button class="favorite-button" @click="showFavoriteModal(fav)">
           {{ decode(truncateTitle(fav.title)) }}
-        </button>
-        <button
-          class="delete-button"
-          @click="removeFavorite(fav)"
-          aria-label="삭제"
-        >
-          X
         </button>
       </div>
     </div>
@@ -60,17 +56,48 @@
       <div v-else>
         <h3>{{ selectedDate }} 운동 완료!</h3>
         <ol>
-          <li
+          <div
             v-for="event in selectedEvents"
             :key="event.title"
-            @click="deleteEvent(event)"
-            class="event-item"
+            class="event-container"
           >
-            {{ decode(event.title) }}
-          </li>
+            <li class="event-item">
+              <RouterLink :to="`/${event.videoId}`" class="card-link">
+                {{ decode(event.title) }}
+              </RouterLink>
+            </li>
+            <button
+              class="delete-button"
+              @click="deleteEvent(event)"
+              aria-label="삭제"
+            >
+              X
+            </button>
+          </div>
         </ol>
       </div>
       <button class="close-button" @click="closeModal">닫기</button>
+    </div>
+  </div>
+
+  <!-- Favorite Modal -->
+  <div v-if="favoriteModalVisible" class="modal">
+    <div class="modal-content">
+      <h4>{{ decode(selectedFavorite.title) }}</h4>
+      <hr />
+      <h5>{{ decode(selectedFavorite.channelName) }}</h5>
+      <div class="modal-actions">
+        <button
+          class="regist-button"
+          @click="registerFavorite(selectedFavorite)"
+        >
+          오운완💪
+        </button>
+        <button class="del-button" @click="removeFavorite(selectedFavorite)">
+          찜 해제❌
+        </button>
+      </div>
+      <button class="close-button" @click="closeFavoriteModal">닫기</button>
     </div>
   </div>
 </template>
@@ -102,6 +129,8 @@ export default {
       selectedEvents: [], // 해당 날짜의 이벤트 목록
       isLoading: false,
       showBox: false,
+      favoriteModalVisible: false,
+      selectedFavorite: null,
     };
   },
   computed: {
@@ -220,10 +249,24 @@ export default {
     async removeFavorite(fav) {
       const favStore = useFavoriteStore();
       await favStore.removeFavorite(fav.videoId); // 찜한 동영상 삭제
+      this.closeFavoriteModal();
     },
     decode(encodedStr) {
       const doc = new DOMParser().parseFromString(encodedStr, "text/html");
       return doc.documentElement.textContent;
+    },
+    showFavoriteModal(fav) {
+      this.selectedFavorite = fav; // 선택한 favorite 정보 저장
+      this.favoriteModalVisible = true; // 모달 표시
+    },
+    closeFavoriteModal() {
+      this.favoriteModalVisible = false; // 모달 닫기
+      this.selectedFavorite = null; // 선택한 favorite 초기화
+    },
+    registerFavorite(fav) {
+      // 등록 로직 추가
+      this.addVideoToToday(fav);
+      this.closeFavoriteModal();
     },
   },
   mounted() {
@@ -246,9 +289,8 @@ body {
 /* 전체 컨테이너 */
 .container {
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  /* padding: 20px; */
+  /* justify-content: space-between; */
+  margin-top: 50px;
 }
 
 /* 캘린더 컨테이너 */
@@ -339,6 +381,7 @@ body {
   font-size: 1.2em;
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .delete-button:hover {
@@ -373,16 +416,16 @@ body {
 
 .gpt-response {
   margin-top: 20px;
-  padding: 10px;
+  padding: 20px;
   background-color: #f5f5f5;
   border-radius: 5px;
   font-size: 1.1rem;
   color: #333;
-}
-
-.gpt-response strong {
-  font-weight: bold;
-  color: #ff5a5a;
+  display: flex; /* Flexbox로 자식 정렬 */
+  flex-direction: column; /* 자식 요소를 세로로 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  align-items: center; /* 가로 중앙 정렬 */
+  width: 100%; /* 부모(container)의 너비에 맞춤 */
 }
 
 /* 모달 스타일 */
@@ -396,15 +439,48 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(5px); /* 배경 흐림 효과 */
+  z-index: 1000; /* 상위 레이어 */
 }
 
 .modal-content {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 */
+  width: 90%;
+  max-width: 500px;
   text-align: center;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 80%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out; /* 모달 등장 애니메이션 */
+}
+@keyframes fadeIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* 제목 스타일 */
+.modal-content h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.modal-content h5 {
+  font-style: oblique;
+}
+.event-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 이벤트 텍스트와 삭제 버튼을 양쪽으로 정렬 */
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 .event-item {
   margin: 10px 0;
@@ -420,27 +496,37 @@ body {
 .event-item:hover {
   background-color: #ffe8e8; /* 더 진한 연한 빨간색 */
 }
+.card-link {
+  text-decoration: none; /* 하이퍼링크 밑줄 제거 */
+  color: inherit; /* 텍스트 색상 유지 */
+}
 
+/* 닫기 버튼 */
 .close-button {
-  background-color: #fb6767;
-  color: white;
+  background-color: #d6d6d6; /* 밝은 회색 */
+  color: #333333; /* 진한 텍스트 */
   border: none;
-  padding: 8px 15px;
+  padding: 10px 20px;
   font-size: 1rem;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .close-button:hover {
-  background-color: #ff4c4c;
+  background-color: #bfbfbf; /* 더 짙은 회색 */
+  transform: translateY(-2px);
 }
 
-/* GPT 컨테이너 */
-.gpt-container {
-  text-align: center;
+.close-button:active {
+  background-color: #a6a6a6; /* 클릭 시 더 짙은 회색 */
+  transform: translateY(0);
+}
 
-  margin-top: 30px;
+.gpt-message-container {
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 가로 중앙 정렬 */
 }
 
 /* gpt-message 버튼 스타일 */
@@ -464,5 +550,78 @@ body {
 .gpt-message:active {
   background-color: #e63b3b;
   transform: translateY(0);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+/* regist-button: 초록색 스타일 */
+.regist-button {
+  background-color: #5cb85c; /* 부드러운 초록색 */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.regist-button:hover {
+  background-color: #4cae4c; /* 더 짙은 초록색 */
+  transform: translateY(-2px);
+}
+
+.regist-button:active {
+  background-color: #449d44; /* 클릭 시 더 짙은 초록색 */
+  transform: translateY(0);
+}
+
+/* del-button: 회색 스타일 */
+.del-button {
+  background-color: #ff7676;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.del-button:hover {
+  background-color: #ff4c4c;
+  transform: translateY(-2px);
+}
+
+.del-button:active {
+  background-color: #e63b3b;
+  transform: translateY(0);
+}
+.modal-button {
+  background-color: #ff7676;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-button:hover {
+  background-color: #ff4c4c;
+}
+.modal-button:active {
+  background-color: #e63b3b;
+}
+/* 텍스트 스타일 */
+.modal-content p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
 }
 </style>

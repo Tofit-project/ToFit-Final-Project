@@ -3790,3 +3790,10 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact org.mybatis.s
 2024-12-29 18:35:38,388 [Worker-76: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2024-12-29 18:35:38,415 [Worker-76: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 10 resources from src\main\resources to target\classes
 2024-12-29 18:35:38,434 [Worker-76: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\seonghui\Desktop\PJT\ToFit-Final-Project\BackEnd\ToFit_PJT\src\test\resources
+2024-12-29 18:42:41,718 [Worker-81: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.tofit:ToFit_PJT:0.0.1-SNAPSHOT @ C:\Users\seonghui\Desktop\PJT\ToFit-Final-Project\BackEnd\ToFit_PJT\pom.xml.
+2024-12-29 18:42:43,003 [Worker-81: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-29 18:42:43,021 [Worker-81: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 10 resources from src\main\resources to target\classes
+2024-12-29 18:42:43,035 [Worker-81: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\seonghui\Desktop\PJT\ToFit-Final-Project\BackEnd\ToFit_PJT\src\test\resources
+2024-12-29 18:42:44,280 [Worker-80: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-29 18:42:44,286 [Worker-80: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-12-29 18:42:44,288 [Worker-80: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\seonghui\Desktop\PJT\ToFit-Final-Project\BackEnd\ToFit_PJT\src\test\resources
