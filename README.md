@@ -169,13 +169,13 @@
 # 5. <a name="fun5">운동 캘린더
 ## &nbsp;&nbsp;5-1. 월별 운동 리포트 생성
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/5-1. 클래스검색(지역, 카테고리, 날짜, 난이도, 가격).gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/b27c83da-a5fb-449e-aa8e-0bd3395105fc" width="100%"/><br/><br/>
 
 <br/>
   
 ## &nbsp;&nbsp;5-2. 운동 기록 관리
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/5-2. 클래스검색(지도).gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/64bc848f-9efc-4bc3-b14d-31b67d4546db" width="100%"/><br/><br/>
 
 <br/>
 
