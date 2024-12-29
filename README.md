@@ -107,7 +107,7 @@
 <h3>● 이성희</h3>
 
 ##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Back-End : 회원가입(아이디 중복 확인, 프로필명 중복 확인), 로그인, 회원 정보(조회, 수정, 탈퇴), 피드 관리(등록, 전체 조회, 상세 조회, 수정, 삭제), 팔로우(등록, 삭제)
-##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Front-End : 로그인 페이지, 마이페이지, 커뮤니티 페이지, 피드 상세 페이지
+##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Front-End : 로그인 페이지, 회원가입 페이지, 마이페이지, 커뮤니티 페이지, 피드 관리 페이지
 
 </div><br/>
 
