@@ -8,31 +8,31 @@
 - :bookmark_tabs: <a href="#function">기능 구현 시연 영상</a>
   - <a href="#fun1">1.&nbsp;로그인</a>
      - 1-1. 회원가입
-      - 1-2. 로그인
+     - 1-2. 로그인
   - <a href="#fun2">2.&nbsp;홈 화면</a>
-      - 2-1. 운동 영상 추천 조회
-   - 2-2. 전체 영상 검색
+     - 2-1. 운동 영상 추천 조회
+     - 2-2. 전체 영상 검색
   - <a href="#fun3">3.&nbsp;강사 조회</a>
-      - 3-1. 강사명 검색
-   - 3-2. 강사 프로필 조회
+     - 3-1. 강사 프로필 조회
+     - 3-2. 강사명 검색
   - <a href="#fun4">4.&nbsp;운동 영상 상세 조회</a>
      - 4-1. 찜 관리
-   - 4-2. 댓글 관리
+     - 4-2. 댓글 관리
   - <a href="#fun5">5.&nbsp;운동 캘린더</a>
-   - 5-1. 월별 운동 리포트 생성
-   - 5-2. 운동 기록 관리
+     - 5-1. 월별 운동 리포트 생성
+     - 5-2. 운동 기록 관리
   - <a href="#fun6">6.&nbsp;마이 피드 관리</a>
   - <a href="#fun7">7.&nbsp;커뮤니티</a>
-   - 7-1. 전체 유저 피드 조회
-   - 7-2. 피드 댓글 관리
-   - 7-3. 리뷰 추천 
+     - 7-1. 전체 유저 피드 조회
+     - 7-2. 피드 댓글 관리
+     - 7-3. 리뷰 추천 
   - <a href="#fun8">8.&nbsp;마이페이지</a>
-    - 8-1. 정보 관리
+     - 8-1. 정보 관리
 
 
 # :books: <a name="outline">개요</a>
 <br/>
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/개요.jpg?raw=true"/>
+<img src="https://github.com/user-attachments/assets/bd4e8cfe-1e02-4c16-ac35-9dcdf5b5753a"/>
 
 > - **프로젝트** : 홈트 입문자를 위한 전문가 운동 영상 커뮤니티
 >
@@ -117,39 +117,39 @@
 # 1. <a name="fun1">로그인
 ## &nbsp;&nbsp;1-1. 회원가입 
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/1-1. 회원가입.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/2ba1da00-e53e-46b8-a2cc-bf4b8b7adcb4" width="100%"/><br/><br/>
 
 <br/>
   
 ## &nbsp;&nbsp;1-2. 로그인
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/1-2. 아이디 찾기.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/6a80dfd2-f61c-434c-a232-9d38608f536f" width="100%"/><br/><br/>
 
 <br/>
 
 # 2. <a name="fun2">홈 화면
 ## &nbsp;&nbsp;2-1. 운동 영상 추천 조회
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/2-1. 클래스 등록.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/ade8d6e8-a5d5-4c9e-aca0-540c12a4aa0c" width="100%"/><br/><br/>
 
 <br/>
 
 ## &nbsp;&nbsp;2-2. 전체 영상 조회
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/2-2. 클래스 승인(관리자).gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/3d10d564-1132-4791-b899-07d9a5f0ebb2" width="100%"/><br/><br/>
 
 <br/>
 
 # 3. <a name="fun3">강사 조회
-## &nbsp;&nbsp;3-1. 강사명 검색
+## &nbsp;&nbsp;3-1. 강사 프로필 조회
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/3-1. 클래스 조회.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/1a8d73c4-4e38-4bb9-86a5-161dcbbd431b" width="100%"/><br/><br/>
 
 <br/>
 
-## &nbsp;&nbsp;3-2. 강사 프로필 조회
+## &nbsp;&nbsp;3-2. 강사명 검색
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/3-2. 문의내역 조회.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/07525e87-8e16-4278-aafb-3575c9dd6beb" width="100%"/><br/><br/>
 
 <br/>
 
