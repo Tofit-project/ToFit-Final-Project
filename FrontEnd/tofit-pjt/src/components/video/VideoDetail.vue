@@ -24,11 +24,20 @@
         </h5>
         <p>조회수 {{ store.video.viewCnt }}회</p>
         <div class="instructor-info">
-          <img
-            :src="store.video.profileImg"
-            alt="instructor"
-            class="instructor-img"
-          />
+              <div v-if="store.video.profileImg">
+                <img
+                  :src="store.video.profileImg"
+                  alt="profile"
+                  class="instructor-img"
+                />
+              </div>
+              <div v-else>
+                <img
+                  src="/images/default_profile.png"
+                  alt="profile"
+                  class="instructor-img"
+                />
+              </div>
           <p class="instructor-channel">
             {{ decode(store.video.channelName) }}
           </p>
@@ -119,11 +128,6 @@ onMounted(() => {
 
 .favorite-btn .heart-icon {
   transition: color 0.3s ease;
-}
-
-.favorite-btn:hover .heart-icon {
-  transform: scale(1.3); /* hover 시 크기 증가 */
-  font-size: 2rem; /* 크기를 더 크게 설정 */
 }
 
 .instructor-info {

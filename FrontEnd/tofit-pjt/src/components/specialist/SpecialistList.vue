@@ -31,7 +31,20 @@
         :key="index"
       >
         <div class="profile-section">
-          <img :src="specialist.profileImg" alt="Profile" class="profile-img" />
+          <div v-if="specialist.profileImg">
+                <img
+                  :src="specialist.profileImg"
+                  alt="profile"
+                  class="profile-img"
+                />
+              </div>
+              <div v-else>
+                <img
+                  src="/images/default_profile.png"
+                  alt="profile"
+                  class="profile-img"
+                />
+              </div>
           <div class="specialist-info">
             <h4>{{ specialist.specialistId }}</h4>
             <p class="hashtags">

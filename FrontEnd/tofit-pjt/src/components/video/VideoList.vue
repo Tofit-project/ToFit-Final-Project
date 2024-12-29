@@ -16,11 +16,20 @@
           <RouterLink :to="`/${video.videoId}`" class="card-link">
             <img :src="video.thumbnail" alt="thumbnail" class="thumbnail" />
             <div class="card-content">
-              <img
-                :src="video.instructorImage"
-                alt="profile"
-                class="instructor-img"
-              />
+              <div v-if="video.instructorImage">
+                <img
+                  :src="video.instructorImage"
+                  alt="profile"
+                  class="instructor-img"
+                />
+              </div>
+              <div v-else>
+                <img
+                  src="/images/default_profile.png"
+                  alt="profile"
+                  class="instructor-img"
+                />
+              </div>
               <div class="info">
                 <h5 class="title">{{ decode(video.title) }}</h5>
                 <p class="instructor">{{ decode(video.channelName) }}</p>
@@ -76,11 +85,20 @@
           <RouterLink :to="`/${video.videoId}`" class="card-link">
             <img :src="video.thumbnail" alt="thumbnail" class="thumbnail" />
             <div class="card-content">
-              <img
-                :src="video.instructorImage"
-                alt="instructor"
-                class="instructor-img"
-              />
+              <div v-if="video.instructorImage">
+                <img
+                  :src="video.instructorImage"
+                  alt="profile"
+                  class="instructor-img"
+                />
+              </div>
+              <div v-else>
+                <img
+                  src="/images/default_profile.png"
+                  alt="profile"
+                  class="instructor-img"
+                />
+              </div>
               <div class="info">
                 <h5 class="title">{{ decode(video.title) }}</h5>
                 <p class="instructor">{{ decode(video.channelName) }}</p>
@@ -182,7 +200,7 @@ onMounted(async () => {
 
 .recommended-section,
 .all-section {
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
 }
 
 .card-container {
@@ -300,5 +318,36 @@ onMounted(async () => {
   transform: scale(1.05);
   background-color: #fabcb0;
   font-weight: bold;
+}
+.pagination {
+  display: flex;
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
+  gap: 1rem; /* 버튼 간격 */
+  margin-top: 1rem;
+}
+
+.page-btn {
+  padding: 0.5rem 1rem;
+  background-color: #f17979; /* 대표 색상 */
+  color: white;
+  border: 1px solid #f17979; /* 테두리 색상 */
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.page-btn:hover {
+  background-color: #f26465; /* 호버시 색상 */
+  transform: scale(1.05); /* 버튼 확대 효과 */
+}
+
+.page-btn:disabled {
+  background-color: #ddd; /* 비활성화된 버튼 색상 */
+  color: #999;
+  cursor: not-allowed;
+  border: 1px solid #ddd;
 }
 </style>
