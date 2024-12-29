@@ -82,7 +82,6 @@
     <!-- 모달 시작부분 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1-->
     <div v-if="selectedFeed" class="modal-background">
       <div class="modal-content">
-        <button class="close-modal" @click="closeModal">x</button>
         <div class="profile-info">
           <div v-if="selectedFeed.profileImg != null">
             <img
@@ -100,6 +99,7 @@
           </div>
           <p class="profile-name">{{ selectedFeed.profileName }}</p>
         </div>
+        <button class="close-modal" @click="closeModal">x</button>
         <div v-if="selectedFeed.images.length > 0" class="modal-images">
           <button class="arrow left" @click="prevImage"><</button>
           <div class="modal-image">
@@ -470,10 +470,55 @@ const formatDate = (date) => {
   color: #333;
 }
 
+/* 프로필 이미지와 이름을 수평으로 나란히 배치 */
+.profile-info {
+  display: flex;
+  /* align-items: center; */
+}
+
+/* 프로필 이미지 크기 설정 */
 .profile-img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+}
+
+/* 프로필 이름 스타일 */
+.profile-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.feed-image-container {
+  width: 100%; /* 카드의 너비를 따라감 */
+  overflow: hidden; /* 이미지를 자름 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feed-image-container img {
+  max-width: 100%; /* 컨테이너 너비에 맞게 이미지 크기 조정 */
+  max-height: 100%; /* 컨테이너 높이에 맞게 이미지 크기 조정 */
+  object-fit: cover; /* 비율 유지하며 채움 */
+  border-radius: 5px; /* 이미지 모서리 둥글게 */
+}
+
+.feed-content {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.feed-footer {
+  margin-top: 50px;
+  text-align: right;
+}
+
+.feed-date {
+  color: #777;
+  font-size: 12px;
+  margin-right: 10px;
 }
 
 /* 모달 배경 */
@@ -509,7 +554,6 @@ const formatDate = (date) => {
 /* 닫기 버튼 */
 .close-modal {
   position: absolute;
-  top: 10px;
   right: 10px;
   background-color: #f26465;
   color: white;
@@ -534,7 +578,7 @@ const formatDate = (date) => {
 .modal-images {
   position: relative;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   height: 300px; /* 이미지 영역 크기 축소 */
   display: flex;
   justify-content: center;
@@ -542,22 +586,23 @@ const formatDate = (date) => {
 }
 
 .modal-image img {
-  max-width: 80%;
-  max-height: 80%;
+  /* max-width: 100%; */
+  /* max-height: 100%; */
   object-fit: contain;
   border-radius: 5px;
+  width: 400px;
+  height: 300px;
 }
 
 .arrow {
   position: absolute;
-  top: 50%;
+  /* top: 50%; */
   /* transform: translateY(-50%); */
   /* background-color: rgba(0, 0, 0, 0.5); */
   border: none;
-  padding: 10px;
-  font-size: 24px;
+  font-size: 25px;
   color: rgb(113, 104, 104);
-  border-radius: 20px;
+  border-radius: 50%;
   cursor: pointer;
   z-index: 1;
 }
@@ -572,11 +617,11 @@ const formatDate = (date) => {
 
 /* 피드 내용 */
 .modal-feed-content {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 20px;
   font-weight: bold;
-  max-height: 300px;
-  overflow-y: auto;
+  max-height: 400px;
+  /* overflow-y: auto; */
   margin-top: 5px;
 }
 
@@ -634,9 +679,9 @@ textarea:focus {
 /* 댓글 작성 폼 */
 .comment-form + div {
   /* 댓글 리스트 컨테이너 */
-  max-height: 300px; /* 댓글 리스트의 최대 높이 제한 */
+  max-height: 200px; /* 댓글 리스트의 최대 높이 제한 */
   overflow-y: auto; /* 스크롤바 활성화 */
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   padding-right: 10px; /* 스크롤바 여유 공간 */
 }
 
@@ -647,7 +692,7 @@ textarea:focus {
 
 .submit-btn {
   position: absolute;
-  bottom: 10px;
+  margin-top: 10px;
   right: 10px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -664,8 +709,8 @@ textarea:focus {
 }
 
 .comment-list {
-  max-height: 800px; /* 스크롤 영역 최대 높이 설정 */
-  overflow-y: auto; /* 세로 스크롤 활성화 */
+  max-height: 500px; /* 스크롤 영역 최대 높이 설정 */
+  overflow-y: auto; /*세로 스크롤 활성화*/
   padding: 10px;
   border: 1px solid #ddd; /* 스크롤 영역 테두리 추가 (선택 사항) */
   border-radius: 8px;
@@ -674,8 +719,8 @@ textarea:focus {
 /* 댓글 카드 */
 .review-card {
   background: #ffffff;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 10px;
+  margin-bottom: 10px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -687,7 +732,7 @@ textarea:focus {
 .review-header {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
 }
 
 .profile-img {
@@ -699,14 +744,19 @@ textarea:focus {
 
 .review-author {
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 15px;
   color: #555;
 }
 
 .review-author .review-date {
   margin-left: 10px;
-  font-size: 0.9rem;
+  font-size: 10px;
   color: #aaa;
+}
+
+.review-content {
+  margin-left: 10px;
+  max-height: 5px;
 }
 
 /* 수정 중일 때 */

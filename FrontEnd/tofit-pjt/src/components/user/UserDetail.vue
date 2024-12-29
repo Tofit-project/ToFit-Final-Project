@@ -1,29 +1,80 @@
 <template>
   <div class="profile-container">
-    <h1 class="page-title">마이페이지</h1>
+    <h2 class="page-title">나의 정보</h2>
+    <div class="profile-img-container">
+      <img
+        :src="userStore.userInfo.profileImg"
+        alt="Profile Image"
+        class="profile-img"
+        v-if="userStore.userInfo.profileImg"
+      />
+      <div v-else class="no-profile-img">No Image</div>
+    </div>
+    <p class="guide-line">
+      가입하신 회원정보입니다. 개인정보 수정 시 하단의 '수정하기' 버튼을 눌러
+      변경할 수 있습니다.
+    </p>
+    <hr class="guide-line-divider" />
 
-    <div v-if="userStore.loginUserId" class="profile-card">
-      <div class="profile-img-container">
-        <img
-          :src="userStore.userInfo.profileImg"
-          alt="Profile Image"
-          class="profile-img"
-          v-if="userStore.userInfo.profileImg"
-        />
-        <div v-else class="no-profile-img">No Image</div>
-      </div>
-      <div class="profile-info">
-        <p><strong>아이디:</strong> {{ userStore.userInfo.userId }}</p>
-        <p><strong>프로필명:</strong> {{ userStore.userInfo.profileName }}</p>
-        <p><strong>이메일:</strong> {{ userStore.userInfo.email }}</p>
-        <p><strong>성별:</strong> {{ genderText }}</p>
-        <p><strong>생년월일:</strong> {{ formattedBirth }}</p>
+    <div v-if="userStore.loginUserId" class="profile-content">
+      <!-- 프로필 이미지 및 정보 -->
+      <div class="profile-header">
+        <div class="profile-info">
+          <p>
+            <strong>아이디</strong>
+            <input
+              type="text"
+              :value="userStore.userInfo.userId"
+              readonly
+              class="profile-input"
+            />
+          </p>
+          <p>
+            <strong>프로필명</strong>
+            <input
+              type="text"
+              :value="userStore.userInfo.profileName"
+              readonly
+              class="profile-input"
+            />
+          </p>
+          <p>
+            <strong>이메일</strong>
+            <input
+              type="email"
+              :value="userStore.userInfo.email"
+              readonly
+              class="profile-input"
+            />
+          </p>
+          <p>
+            <strong>성별</strong>
+            <input
+              type="text"
+              :value="genderText"
+              readonly
+              class="profile-input"
+            />
+          </p>
+          <p>
+            <strong>생년월일</strong>
+            <input
+              type="text"
+              :value="formattedBirth"
+              readonly
+              class="profile-input"
+            />
+          </p>
+        </div>
       </div>
 
-      <!-- 탈퇴하기 버튼 -->
-      <button @click="handleDeleteAccount" class="delete-button">
-        탈퇴하기
-      </button>
+      <!-- 탈퇴하기 및 수정하기 버튼 -->
+      <div class="actions">
+        <button @click="handleEditAccount" class="edit-button">수정하기</button>
+        <button @click="handleDeleteAccount" class="delete-button">
+          탈퇴하기
+        </button>
+      </div>
     </div>
 
     <div v-else class="no-user-info">
@@ -67,63 +118,85 @@ const handleDeleteAccount = () => {
     userStore.loginUserProfileImage.value = null;
   }
 };
+
+const handleEditAccount = () => {
+  alert("계정 수정 페이지로 이동합니다.");
+  // 수정 페이지로 이동하는 로직 추가 (예: router.push({ name: 'editAccount' }))
+};
 </script>
 
 <style scoped>
-/* 전체 컨테이너 스타일 */
 .profile-container {
   width: 90%;
-  max-width: 500px; /* 카드 가로폭을 좁힘 */
+  max-width: 500px; /* 너비 제한 */
   margin: 50px auto;
-  text-align: center;
   font-family: "Arial", sans-serif;
+  text-align: center;
+  border: 2px solid #ddd;
+  padding: 50px;
 }
 
+/* 페이지 제목 */
 .page-title {
-  font-size: 2.5rem; /* 제목 크기 키움 */
+  font-size: 2rem;
   font-weight: 700;
-  color: #2c3e50; /* 어두운 회색으로 변경 */
-  margin-bottom: 40px;
-  text-align: center;
-  text-transform: uppercase; /* 제목 대문자로 변경 */
-  letter-spacing: 1px; /* 제목 간격을 조금 넓힘 */
+  color: #9c9b9b;
+  margin-bottom: 20px; /* 제목과 프로필 이미지 간격 조정 */
+  text-transform: uppercase;
+  letter-spacing: 1px;
   font-family: "Poppins", sans-serif;
 }
 
-/* 프로필 카드 */
-.profile-card {
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.3s ease;
-  margin-bottom: 40px;
+/* 가이드라인 스타일 */
+.guide-line {
+  font-size: 14px;
+  color: #7d7d7d;
+  margin-bottom: 20px;
+  font-family: "Arial", sans-serif;
 }
 
-.profile-card:hover {
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+/* 구분선 스타일 */
+.guide-line-divider {
+  border: 0;
+  border-top: 1px solid #939191;
+  margin-bottom: 30px;
+}
+
+/* 프로필 내용 스타일 */
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column; /* 세로로 배치 */
+  align-items: center; /* 중앙 정렬 */
+  gap: 20px; /* 이미지와 텍스트 간격 */
 }
 
 .profile-img-container {
   position: relative;
-  margin-bottom: 20px;
+  width: 120px; /* 이미지 크기 */
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 30px;
+  margin-left: auto; /* 중앙 정렬을 위해 왼쪽 여백 자동으로 설정 */
+  margin-right: auto; /* 중앙 정렬을 위해 오른쪽 여백 자동으로 설정 */
 }
 
 .profile-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 2px solid #eee;
 }
 
 .no-profile-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   background-color: #e0e0e0;
   display: flex;
   align-items: center;
@@ -135,47 +208,83 @@ const handleDeleteAccount = () => {
 .profile-info {
   text-align: left;
   width: 100%;
-  margin-top: 20px;
 }
 
 .profile-info p {
-  font-size: 18px; /* 글자 크기 키움 */
-  margin: 12px 0;
+  font-size: 16px;
   color: #555;
+  margin: 10px 0; /* 항목 간격 */
+  display: flex;
+  align-items: center;
 }
 
 .profile-info strong {
-  color: #0056b3;
+  color: #46484b;
   font-weight: bold;
+  min-width: 80px; /* strong의 고정 너비 설정 */
+}
+
+.profile-info input {
+  flex: 1; /* 나머지 공간을 차지하도록 설정 */
+  text-align: left; /* input 태그의 텍스트 왼쪽 정렬 */
+  margin-left: 60px;
+  border: none;
+  background-color: #faf9f9;
+  padding: 7px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 250px;
+}
+
+.profile-info input[readonly] {
+  cursor: not-allowed;
+  background-color: #efeded;
+}
+
+/* 탈퇴하기 및 수정하기 버튼 */
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.edit-button,
+.delete-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px; /* 덜 둥글게 */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 30px;
+}
+
+.edit-button {
+  background-color: #d65142;
+  color: white;
+  border: none;
+}
+
+.delete-button {
+  background-color: #f77364;
+  color: white;
+  border: none;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  transform: scale(1.05);
+}
+
+.edit-button:focus,
+.delete-button:focus {
+  outline: none;
 }
 
 /* 로그인 정보가 없을 때 */
 .no-user-info {
-  font-size: 18px; /* 글자 크기 키움 */
+  font-size: 18px;
   color: #f44336;
   font-weight: bold;
   margin-top: 30px;
-}
-
-/* 탈퇴하기 버튼 스타일 */
-.delete-button {
-  margin-top: 30px;
-  padding: 12px 25px;
-  background-color: #e74c3c;
-  color: white;
-  font-size: 18px;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.delete-button:hover {
-  background-color: #c0392b;
-  transform: scale(1.05);
-}
-
-.delete-button:focus {
-  outline: none;
 }
 </style>

@@ -28,7 +28,7 @@ public class MailService {
 		message.setSubject("ToFit 회원가입 인증 번호입니다."); // 제목
 		message.setText("이메일 인증코드: " + code); // 보
 		
-		message.setFrom("yoonji0624@naver.com");
+		message.setFrom("yam3472@naver.com");
 		
 		return message;
 		
