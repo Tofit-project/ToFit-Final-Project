@@ -156,13 +156,13 @@
 # 4. <a name="fun4">운동 영상 상세 조회
 ## &nbsp;&nbsp;4-1. 찜 관리
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/4-1. 일정관리.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/3382b1e5-37b9-4e7a-b559-20522ecaf074" width="100%"/><br/><br/>
 
 <br/>
 
 ## &nbsp;&nbsp;4-2. 댓글 관리
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/4-2. 신청관리.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/6f617302-78cf-4a6b-9489-33effa07b870" width="100%"/><br/><br/>
 
 <br/>
 
@@ -180,26 +180,26 @@
 <br/>
 
 # 6. <a name="fun6">마이 피드 관리
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/5-2. 클래스검색(지도).gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/71a54a21-885a-4aca-9701-8b3c3531c82c" width="100%"/><br/><br/>
 
 <br/>
 
 # 7. <a name="fun7">커뮤니티
 ## &nbsp;&nbsp;7-1. 전체 유저 피드 조회
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/7-1. 신청 내역 조회(상세보기).gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/2810f477-2a1d-4bb9-83a1-148348da521d" width="100%"/><br/><br/>
 
 <br/>
 
 ## &nbsp;&nbsp;7-2. 피드 댓글 관리
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/7-2. 리뷰 작성.gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/22663ac9-7535-4aaa-9e58-f2016eb4ac9e" width="100%"/><br/><br/>
 
 <br/>
 
 # 8. <a name="fun8">마이페이지
 ## &nbsp;&nbsp;8-1. 정보 관리
 
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/8. 커뮤니티(게시글 및 댓글 작성).gif?raw=true" width="100%"/><br/><br/>
+<img src="https://github.com/user-attachments/assets/4b0d2fbe-2521-4888-a7eb-5d77413379b0" width="100%"/><br/><br/>
 
 <br/>
