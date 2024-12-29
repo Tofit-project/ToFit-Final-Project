@@ -93,8 +93,7 @@
 # :scroll: <a name="erd">ERD</a>
 
 ## 전체 ERD
-
-<img src="https://github.com/LeeSeongHui/Final-Project/blob/main/src/main/resources/static/portfolio/전체erd.png?raw=true" width="100%"/>
+<img src="https://github.com/user-attachments/assets/6a20064f-994a-46ea-9194-7c9f454459c3" width="100%"/>
 <br/>
 
 # :family: <a name="team">팀원 역할 소개</a>
