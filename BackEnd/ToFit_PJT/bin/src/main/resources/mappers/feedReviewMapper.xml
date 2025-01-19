@@ -4,11 +4,10 @@
 <mapper namespace="com.tofit.mvc.model.dao.FeedReviewDao">
 
 	<!-- 피드 댓글 전체 조회 -->
-	<select id="selectAll" parameterType="int" resultType="FeedReview">
+	<select id="selectAll" parameterType="int" resultType="FeedReviewView">
 		SELECT *
-		FROM FEEDREVIEW
-		WHERE FEED_ID = #{feedId}
-		ORDER BY REVIEW_ID DESC;
+		FROM FEED_REVIEW_VIEW
+		WHERE FEED_ID = #{feedId};
 	</select>
 	
 	<!-- 피드 댓글 등록 -->
